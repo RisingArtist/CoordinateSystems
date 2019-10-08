@@ -1,4 +1,8 @@
 #pragma once
+//Make adjoint and inverse
+//Figure out a way to multiply with a vector
+//Create special matrices too, like the identity matrix. 
+
 class Matrix3x3
 {
 public:

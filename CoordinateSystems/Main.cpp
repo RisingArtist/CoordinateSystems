@@ -6,26 +6,10 @@ using namespace std;
 
 std::ostream& operator<<(std::ostream& os, const Vector3& obj);
 std::ostream& operator<<(std::ostream& os, const Matrix3x3& obj);
-
+void MatrixTest();
 int main()
 {
-	Matrix3x3 mat1;
-	float vals[9] = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
-	Matrix3x3 mat2(vals);
-
-	cout << "The first matrix is: " << endl;
-	cout << mat1;
-	cout << "The second matrix is: " << endl;
-	cout << mat2;
-
-	cout << "Adding the two matrices together and storing it to the first matrix..." << endl;
-	mat1 += mat2;
-
-	cout << "The first matrix is now: " << endl;
-	cout << mat1;
-
-	cout << "The determinant of the first matrix is: " << mat1.Determinant();
-
+	MatrixTest();
 }
 
 std::ostream& operator<<(std::ostream& os, const Vector3& obj)
@@ -79,4 +63,19 @@ void vectorTest()
 
 	cout << "First vector crosses second vector..." << endl;
 	cout << vec1.Cross(vec2) << endl;
+}
+
+void MatrixTest()
+{
+	float vals[9] = { 1, 1, 2, 3, 4, 5, 6, 7, 8 };
+	Matrix3x3 mat1(vals);
+
+	cout << "The given matrix is: " << endl;
+	cout << mat1;
+
+	cout << "The inverse of the matrix is: " << endl;
+	float* inverse = mat1.GetInverse();
+	cout << inverse[0] << ", " << inverse[1] << ", " << inverse[2] << endl;
+	cout << inverse[3] << ", " << inverse[4] << ", " << inverse[5] << endl;
+	cout << inverse[6] << ", " << inverse[7] << ", " << inverse[8] << endl;
 }

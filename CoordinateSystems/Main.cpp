@@ -1,15 +1,42 @@
 #include <iostream>
-#include "Vector3.h"
 #include "Matrix3x3.h"
 
 using namespace std;
 
 std::ostream& operator<<(std::ostream& os, const Vector3& obj);
 std::ostream& operator<<(std::ostream& os, const Matrix3x3& obj);
-void MatrixTest();
+
+void MultiplyMatrixTest();
+
 int main()
 {
-	MatrixTest();
+	Matrix3x3 test = Matrix_Constants::identity;
+	cout << "Starting Matrix..." << endl;
+	cout << test;
+
+	Vector3 scaleVector(2, 2, 2);
+	cout << "Scaling by 2..." << endl;
+	Matrix3x3 scaledMat(
+		test.GetFirstRow() * scaleVector.x,
+		test.GetSecondRow() * scaleVector.y,
+		test.GetThirdRow() * scaleVector.z
+	);
+	cout << scaledMat;
+	test = test * scaledMat;
+
+	cout << "Rotating the matrix by 90 on the Z..." << endl;
+	Vector3 rotateVector(0, 0, 90);
+	test = test.Rotate(rotateVector);
+	cout << test;
+
+	Vector3 translateVector(1, 2, 1);
+	cout << "Translate by ( 1, 2, 1)..." << endl;
+	Matrix3x3 translatedMat(
+		test.GetFirstRow() * translateVector.x,
+		test.GetSecondRow() * translateVector.y,
+		test.GetThirdRow() * translateVector.z
+	);
+	cout << translatedMat;
 }
 
 std::ostream& operator<<(std::ostream& os, const Vector3& obj)
@@ -20,9 +47,10 @@ std::ostream& operator<<(std::ostream& os, const Vector3& obj)
 
 std::ostream& operator<<(std::ostream& os, const Matrix3x3& obj)
 {
-	os << obj.elements[0] << " " << obj.elements[1] << " " << obj.elements[2] << "\n"
-		<< obj.elements[3] << " " << obj.elements[4] << " " << obj.elements[5] << "\n"
-		<< obj.elements[6] << " " << obj.elements[7] << " " << obj.elements[8] << endl;
+	//cout.setf(ios::fixed);
+	os  << obj.elements[0][0] << " " << obj.elements[0][1] << " " << obj.elements[0][2] << "\n"
+		<< obj.elements[1][0] << " " << obj.elements[1][1] << " " << obj.elements[1][2] << "\n"
+		<< obj.elements[2][0] << " " << obj.elements[2][1] << " " << obj.elements[2][2] << endl;
 	return os;
 }
 
@@ -65,17 +93,73 @@ void vectorTest()
 	cout << vec1.Cross(vec2) << endl;
 }
 
+void MultiplyMatrixTest()
+{
+	Matrix3x3 mat1(new float[9]{ 1, 2, 3, 4, 5, 6, 7, 8, 9 });
+	float vals[9] = {2, 0, 0, 0, 2, 0, 0, 0, 2};
+	Matrix3x3 mat2(vals);
+
+	std::cout << "Multiplying two matrices together..." << endl;
+	std::cout << mat1 * mat2;
+}
+
+
 void MatrixTest()
 {
-	float vals[9] = { 1, 1, 2, 3, 4, 5, 6, 7, 8 };
-	Matrix3x3 mat1(vals);
+	//float vals[9] = { 1, 2, 3, 4, 5, 6, 7, 8, 9};
+	Matrix3x3 mat1;
 
 	cout << "The given matrix is: " << endl;
 	cout << mat1;
 
-	cout << "The inverse of the matrix is: " << endl;
-	float* inverse = mat1.GetInverse();
-	cout << inverse[0] << ", " << inverse[1] << ", " << inverse[2] << endl;
-	cout << inverse[3] << ", " << inverse[4] << ", " << inverse[5] << endl;
-	cout << inverse[6] << ", " << inverse[7] << ", " << inverse[8] << endl;
+	cout << "Finding the determinant..." << endl;
+	cout << mat1.GetDeterminant() << endl;
+
+	cout << "The adjoint of the matrix..." << endl;
+	float* adj = mat1.GetAdjoint();
+	cout << adj[0] << ", " << adj[1] << ", " << adj[2] << endl;
+	cout << adj[3] << ", " << adj[4] << ", " << adj[5] << endl;
+	cout << adj[6] << ", " << adj[7] << ", " << adj[8] << endl;
+
+	cout << "Getting the inverse of mat1..." << endl;
+	float* inv = mat1.GetInverse();
+	cout << inv[0] << ", " << inv[1] << ", " << inv[2] << endl;
+	cout << inv[3] << ", " << inv[4] << ", " << inv[5] << endl;
+	cout << inv[6] << ", " << inv[7] << ", " << inv[8] << endl;
+
+	Vector3 scaleVector(1, 2, 3);
+	cout << "Multiplying the matrix by 2..." << endl;
+	cout << mat1 * scaleVector << endl;
+}
+
+void AddBackLater()
+{
+	float elements[9];
+	cout << "Create a 3x3 matrix for an object: " << endl;
+
+	float number;
+	bool valid;
+	for (int i = 0; i < 9; i++)
+	{
+		do
+		{
+			cout << "Enter for #" << i << ": ";
+			cin >> number;
+			valid = true;
+			if (!cin)
+			{
+				cout << endl;
+				cout << "Invalid Entry. Please enter a number!" << endl;
+				valid = false;
+				cin.clear();
+				cin.ignore(numeric_limits<streamsize>::max(), '\n');
+			}
+		} while (!valid);
+
+		elements[i] = number;
+	}
+
+	Matrix3x3 mat1(elements);
+	cout << "The result matrix: " << endl;
+	cout << mat1;
 }

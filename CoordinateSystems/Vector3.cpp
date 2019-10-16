@@ -1,6 +1,4 @@
 #include "Vector3.h"
-#include "Constants.h"
-
 
 Vector3::Vector3()
 {
@@ -77,7 +75,7 @@ void Vector3::Scale(float modifier)
 
 float Vector3::Length()
 {
-	return std::sqrtf(this->x * this->x + this->y * this->y + this->z * this->z);
+	return sqrtf(this->x * this->x + this->y * this->y + this->z * this->z);
 }
 
 float Vector3::Dot(const Vector3& other)

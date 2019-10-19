@@ -1,60 +1,47 @@
 #include <iostream>
 #include "Matrix3x3.h"
+#include "Matrix4x4.h"
 
 using namespace std;
 
+//Function prototypes
 std::ostream& operator<<(std::ostream& os, const Vector3& obj);
 std::ostream& operator<<(std::ostream& os, const Matrix3x3& obj);
-
-void MultiplyMatrixTest();
+std::ostream& operator<<(std::ostream& os, const Matrix4x4& obj);
 
 int main()
 {
-	Matrix3x3 test = Matrix_Constants::identity;
-	cout << "Starting Matrix..." << endl;
-	cout << test;
+	Matrix3x3 mat1 = Matrix_Constants::identity;
+	cout << "The starting off matrix: " << endl;
+	cout << mat1;
 
+	cout << "Scaling the game object by (2, 2, 2): " << endl;
 	Vector3 scaleVector(2, 2, 2);
-	cout << "Scaling by 2..." << endl;
 	Matrix3x3 scaledMat(
-		test.GetFirstRow() * scaleVector.x,
-		test.GetSecondRow() * scaleVector.y,
-		test.GetThirdRow() * scaleVector.z
+		mat1.GetFirstRow() * scaleVector.x,
+		mat1.GetSecondRow() * scaleVector.y,
+		mat1.GetThirdRow() * scaleVector.z
 	);
 	cout << scaledMat;
-	test = test * scaledMat;
+	mat1 = mat1 * scaledMat;
 
 	cout << "Rotating the matrix by 90 on the Z..." << endl;
 	Vector3 rotateVector(0, 0, 90);
-	test = test.Rotate(rotateVector);
-	cout << test;
+	mat1 = mat1.Rotate(rotateVector);
+	cout << mat1; 
 
-	Vector3 translateVector(1, 2, 1);
-	cout << "Translate by ( 1, 2, 1)..." << endl;
-	Matrix3x3 translatedMat(
-		test.GetFirstRow() * translateVector.x,
-		test.GetSecondRow() * translateVector.y,
-		test.GetThirdRow() * translateVector.z
-	);
-	cout << translatedMat;
+	cout << "Converting to 4x4 Matrix..." << endl;
+	Matrix4x4 mat4(mat1.GetFirstRow(), mat1.GetSecondRow(), mat1.GetThirdRow());
+
+	cout << "Translating over by (1, 2, 3)..." << endl;
+	mat4.Translate(Vector3(1, 2, 3));
+
+	cout << "The final result..." << endl;
+	cout << mat4;
 }
 
-std::ostream& operator<<(std::ostream& os, const Vector3& obj)
-{
-	os << "( " << obj.x << ", " << obj.y << ", " << obj.z << " )";
-	return os;
-}
-
-std::ostream& operator<<(std::ostream& os, const Matrix3x3& obj)
-{
-	//cout.setf(ios::fixed);
-	os  << obj.elements[0][0] << " " << obj.elements[0][1] << " " << obj.elements[0][2] << "\n"
-		<< obj.elements[1][0] << " " << obj.elements[1][1] << " " << obj.elements[1][2] << "\n"
-		<< obj.elements[2][0] << " " << obj.elements[2][1] << " " << obj.elements[2][2] << endl;
-	return os;
-}
-
-void vectorTest()
+//Tests 
+void VectorTest()
 {
 	Vector3 vec1;
 	Vector3 vec2(1, 2, 3);
@@ -103,33 +90,26 @@ void MultiplyMatrixTest()
 	std::cout << mat1 * mat2;
 }
 
-
 void MatrixTest()
 {
-	//float vals[9] = { 1, 2, 3, 4, 5, 6, 7, 8, 9};
-	Matrix3x3 mat1;
+	Matrix3x3 test = Matrix_Constants::identity;
+	cout << "Starting Matrix..." << endl;
+	cout << test;
 
-	cout << "The given matrix is: " << endl;
-	cout << mat1;
+	Vector3 scaleVector(2, 2, 2);
+	cout << "Scaling by 2..." << endl;
+	Matrix3x3 scaledMat(
+		test.GetFirstRow() * scaleVector.x,
+		test.GetSecondRow() * scaleVector.y,
+		test.GetThirdRow() * scaleVector.z
+	);
+	cout << scaledMat;
+	test = test * scaledMat;
 
-	cout << "Finding the determinant..." << endl;
-	cout << mat1.GetDeterminant() << endl;
-
-	cout << "The adjoint of the matrix..." << endl;
-	float* adj = mat1.GetAdjoint();
-	cout << adj[0] << ", " << adj[1] << ", " << adj[2] << endl;
-	cout << adj[3] << ", " << adj[4] << ", " << adj[5] << endl;
-	cout << adj[6] << ", " << adj[7] << ", " << adj[8] << endl;
-
-	cout << "Getting the inverse of mat1..." << endl;
-	float* inv = mat1.GetInverse();
-	cout << inv[0] << ", " << inv[1] << ", " << inv[2] << endl;
-	cout << inv[3] << ", " << inv[4] << ", " << inv[5] << endl;
-	cout << inv[6] << ", " << inv[7] << ", " << inv[8] << endl;
-
-	Vector3 scaleVector(1, 2, 3);
-	cout << "Multiplying the matrix by 2..." << endl;
-	cout << mat1 * scaleVector << endl;
+	cout << "Rotating the matrix by 90 on the Z..." << endl;
+	Vector3 rotateVector(0, 0, 90);
+	test = test.Rotate(rotateVector);
+	cout << test;
 }
 
 void AddBackLater()
@@ -162,4 +142,28 @@ void AddBackLater()
 	Matrix3x3 mat1(elements);
 	cout << "The result matrix: " << endl;
 	cout << mat1;
+}
+
+//Input and Output Overloads
+std::ostream& operator<<(std::ostream& os, const Vector3& obj)
+{
+	os << "( " << obj.x << ", " << obj.y << ", " << obj.z << " )";
+	return os;
+}
+
+std::ostream& operator<<(std::ostream& os, const Matrix3x3& obj)
+{
+	os << obj.elements[0][0] << " " << obj.elements[0][1] << " " << obj.elements[0][2] << "\n"
+		<< obj.elements[1][0] << " " << obj.elements[1][1] << " " << obj.elements[1][2] << "\n"
+		<< obj.elements[2][0] << " " << obj.elements[2][1] << " " << obj.elements[2][2] << endl;
+	return os;
+}
+
+std::ostream& operator<<(std::ostream& os, const Matrix4x4& obj)
+{
+	os << obj.elements[0][0] << " " << obj.elements[0][1] << " " << obj.elements[0][2] << " " << obj.elements[0][3] << "\n"
+		<< obj.elements[1][0] << " " << obj.elements[1][1] << " " << obj.elements[1][2] << " " << obj.elements[1][3] << "\n"
+		<< obj.elements[2][0] << " " << obj.elements[2][1] << " " << obj.elements[2][2] << " " << obj.elements[2][3] << "\n"
+		<< obj.elements[3][0] << " " << obj.elements[3][1] << " " << obj.elements[3][2] << " " << obj.elements[3][3] << endl;
+	return os;
 }

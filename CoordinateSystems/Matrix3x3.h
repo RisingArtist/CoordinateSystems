@@ -37,8 +37,6 @@ public:
 	Vector3 GetSecondRow();
 	Vector3 GetThirdRow();
 
-
-
 private:
 	const int numOfColums = 3;
 	const int numOfRows = 3;

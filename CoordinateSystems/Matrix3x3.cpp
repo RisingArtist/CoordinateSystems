@@ -49,6 +49,7 @@ void Matrix3x3::operator=(const Matrix3x3& other)
 		for (int col = 0; col < other.numOfColums; col++)
 			elements[row][col] = other.elements[row][col];
 	}
+	UpdateRows();
 }
 
 Matrix3x3 Matrix3x3::operator+(const Matrix3x3& other)

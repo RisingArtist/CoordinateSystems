@@ -59,11 +59,19 @@ Matrix4x4 Matrix4x4::operator*(const Matrix4x4 & other)
 	return temp;
 }
 
+Vector4 Matrix4x4::operator*(const Vector4& other)
+{
+	return Vector4(firstRow.Dot(other), secondRow.Dot(other), thirdRow.Dot(other), fourthRow.Dot(other));
+}
+
+
 void Matrix4x4::Translate(const Vector3& _translate)
 {
-	elements[0][3] += _translate.x;
-	elements[1][3] += _translate.y;
-	elements[2][3] += _translate.z;
+	Vector4 translate(_translate.x, _translate.y, _translate.z);
+
+	elements[0][3] = firstRow.Dot(translate);
+	elements[1][3] = secondRow.Dot(translate);
+	elements[2][3] = thirdRow.Dot(translate);
 }
 
 Matrix4x4::~Matrix4x4()

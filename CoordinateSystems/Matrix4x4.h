@@ -12,6 +12,8 @@ public:
 	Matrix4x4(float _elements[16]);
 	Matrix4x4(Vector3 firstRow, Vector3 secondRow, Vector3 thirdRow);
 
+	Matrix4x4 operator*(const Matrix4x4& other);
+	Vector4 operator*(const Vector4& other);
 	void Translate(const Vector3& _translate);
 
 	~Matrix4x4();

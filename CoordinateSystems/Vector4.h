@@ -3,15 +3,15 @@ class Vector4
 {
 public:
 	Vector4();
-	Vector4(float _x, float _y, float _z, float _w);
+	Vector4(float _x, float _y, float _z, float _w = 1);
 
-	Vector4 operator*(const float& other);
-	void operator*=(const float& other);
+	Vector4 operator*(const float& other); //TODO: Implement
+	void operator*=(const float& other); //TODO: Implement
 
 	float Dot(const Vector4& other);
 
 	~Vector4();
-private:
+public:
 	float x;
 	float y;
 	float z;
